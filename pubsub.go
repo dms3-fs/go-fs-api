@@ -4,8 +4,8 @@ import (
 	"encoding/binary"
 	"encoding/json"
 
-	"github.com/libp2p/go-libp2p-peer"
-	pb "github.com/libp2p/go-libp2p-pubsub/pb"
+	"github.com/dms3-p2p/go-p2p-peer"
+	pb "github.com/dms3-p2p/go-p2p-pubsub/pb"
 )
 
 // PubSubRecord is a record received via PubSub.

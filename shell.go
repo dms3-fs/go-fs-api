@@ -1,4 +1,4 @@
-// package shell implements a remote API interface for a running ipfs daemon
+// package shell implements a remote API interface for a running dms3fs daemon
 package shell
 
 import (
@@ -15,20 +15,20 @@ import (
 	"strings"
 	"time"
 
-	files "github.com/ipfs/go-ipfs-cmdkit/files"
+	files "github.com/dms3-fs/go-fs-cmdkit/files"
 	homedir "github.com/mitchellh/go-homedir"
-	ma "github.com/multiformats/go-multiaddr"
-	manet "github.com/multiformats/go-multiaddr-net"
+	ma "github.com/dms3-mft/go-multiaddr"
+	manet "github.com/dms3-mft/go-multiaddr-net"
 	tar "github.com/whyrusleeping/tar-utils"
 
-	p2pmetrics "github.com/libp2p/go-libp2p-metrics"
+	p2pmetrics "github.com/dms3-p2p/go-p2p-metrics"
 )
 
 const (
-	DefaultPathName = ".ipfs"
+	DefaultPathName = ".dms3-fs"
 	DefaultPathRoot = "~/" + DefaultPathName
 	DefaultApiFile  = "api"
-	EnvDir          = "IPFS_PATH"
+	EnvDir          = "DMS3FS_PATH"
 )
 
 type Shell struct {
@@ -139,12 +139,12 @@ type object struct {
 	Hash string
 }
 
-// Add a file to ipfs from the given reader, returns the hash of the added file
+// Add a file to dms3fs from the given reader, returns the hash of the added file
 func (s *Shell) Add(r io.Reader) (string, error) {
 	return s.AddWithOpts(r, true, false)
 }
 
-// AddNoPin a file to ipfs from the given reader, returns the hash of the added file without pinning the file
+// AddNoPin a file to dms3fs from the given reader, returns the hash of the added file without pinning the file
 func (s *Shell) AddNoPin(r io.Reader) (string, error) {
 	return s.AddWithOpts(r, false, false)
 }
@@ -423,10 +423,10 @@ func (s *Shell) ResolvePath(path string) (string, error) {
 		return "", err
 	}
 
-	return strings.TrimPrefix(out.Path, "/ipfs/"), nil
+	return strings.TrimPrefix(out.Path, "/dms3fs/"), nil
 }
 
-// returns ipfs version and commit sha
+// returns dms3fs version and commit sha
 func (s *Shell) Version() (string, string, error) {
 	ver := struct {
 		Version string
@@ -489,7 +489,7 @@ func (s *Shell) BlockPut(block []byte, format, mhtype string, mhlen int) (string
 		Exec(context.Background(), &out)
 }
 
-type IpfsObject struct {
+type Dms3FsObject struct {
 	Links []ObjectLink
 	Data  string
 }
@@ -499,15 +499,15 @@ type ObjectLink struct {
 	Size       uint64
 }
 
-func (s *Shell) ObjectGet(path string) (*IpfsObject, error) {
-	var obj IpfsObject
+func (s *Shell) ObjectGet(path string) (*Dms3FsObject, error) {
+	var obj Dms3FsObject
 	if err := s.Request("object/get", path).Exec(context.Background(), &obj); err != nil {
 		return nil, err
 	}
 	return &obj, nil
 }
 
-func (s *Shell) ObjectPut(obj *IpfsObject) (string, error) {
+func (s *Shell) ObjectPut(obj *Dms3FsObject) (string, error) {
 	var data bytes.Buffer
 	err := json.NewEncoder(&data).Encode(obj)
 	if err != nil {

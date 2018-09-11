@@ -21,7 +21,7 @@ func TestAdd(t *testing.T) {
 	is := is.New(t)
 	s := NewShell(shellUrl)
 
-	mhash, err := s.Add(bytes.NewBufferString("Hello IPFS Shell tests"))
+	mhash, err := s.Add(bytes.NewBufferString("Hello DMS3FS Shell tests"))
 	is.Nil(err)
 	is.Equal(mhash, "QmUfZ9rAdhV5ioBzXKdUTh2ZNsz9bzbkaLVyQ8uc8pj21F")
 }
@@ -40,7 +40,7 @@ func TestLocalShell(t *testing.T) {
 	s := NewLocalShell()
 	is.NotNil(s)
 
-	mhash, err := s.Add(bytes.NewBufferString("Hello IPFS Shell tests"))
+	mhash, err := s.Add(bytes.NewBufferString("Hello DMS3FS Shell tests"))
 	is.Nil(err)
 	is.Equal(mhash, "QmUfZ9rAdhV5ioBzXKdUTh2ZNsz9bzbkaLVyQ8uc8pj21F")
 }
@@ -49,7 +49,7 @@ func TestCat(t *testing.T) {
 	is := is.New(t)
 	s := NewShell(shellUrl)
 
-	rc, err := s.Cat(fmt.Sprintf("/ipfs/%s/readme", examplesHash))
+	rc, err := s.Cat(fmt.Sprintf("/dms3fs/%s/readme", examplesHash))
 	is.Nil(err)
 
 	md5 := md5.New()
@@ -62,12 +62,12 @@ func TestList(t *testing.T) {
 	is := is.New(t)
 	s := NewShell(shellUrl)
 
-	list, err := s.List(fmt.Sprintf("/ipfs/%s", examplesHash))
+	list, err := s.List(fmt.Sprintf("/dms3fs/%s", examplesHash))
 	is.Nil(err)
 
 	is.Equal(len(list), 7)
 
-	// TODO: document difference in size between 'ipfs ls' and 'ipfs file ls -v'. additional object encoding in data block?
+	// TODO: document difference in size between 'dms3fs ls' and 'dms3fs file ls -v'. additional object encoding in data block?
 	expected := map[string]LsLink{
 		"about":          {Type: TFile, Hash: "QmZTR5bcpQD7cFgTorqxZDYaew1Wqgfbd2ud9QqGPAkK2V", Name: "about", Size: 1688},
 		"contact":        {Type: TFile, Hash: "QmYCvbfNbCwFR45HiNP45rwJgvatpiW38D961L5qAhUM5Y", Name: "contact", Size: 200},
@@ -89,14 +89,14 @@ func TestFileList(t *testing.T) {
 	is := is.New(t)
 	s := NewShell(shellUrl)
 
-	list, err := s.FileList(fmt.Sprintf("/ipfs/%s", examplesHash))
+	list, err := s.FileList(fmt.Sprintf("/dms3fs/%s", examplesHash))
 	is.Nil(err)
 
 	is.Equal(list.Type, "Directory")
 	is.Equal(list.Size, 0)
 	is.Equal(len(list.Links), 7)
 
-	// TODO: document difference in sice betwen 'ipfs ls' and 'ipfs file ls -v'. additional object encoding in data block?
+	// TODO: document difference in sice betwen 'dms3fs ls' and 'dms3fs file ls -v'. additional object encoding in data block?
 	expected := map[string]UnixLsLink{
 		"about":          {Type: "File", Hash: "QmZTR5bcpQD7cFgTorqxZDYaew1Wqgfbd2ud9QqGPAkK2V", Name: "about", Size: 1677},
 		"contact":        {Type: "File", Hash: "QmYCvbfNbCwFR45HiNP45rwJgvatpiW38D961L5qAhUM5Y", Name: "contact", Size: 189},
@@ -119,7 +119,7 @@ func TestPins(t *testing.T) {
 	s := NewShell(shellUrl)
 
 	// Add a thing, which pins it by default
-	h, err := s.Add(bytes.NewBufferString("go-ipfs-api pins test 9F3D1F30-D12A-4024-9477-8F0C8E4B3A63"))
+	h, err := s.Add(bytes.NewBufferString("go-fs-api pins test 9F3D1F30-D12A-4024-9477-8F0C8E4B3A63"))
 	is.Nil(err)
 
 	pins, err := s.Pins()
@@ -169,7 +169,7 @@ func TestResolvePath(t *testing.T) {
 	is := is.New(t)
 	s := NewShell(shellUrl)
 
-	childHash, err := s.ResolvePath(fmt.Sprintf("/ipfs/%s/about", examplesHash))
+	childHash, err := s.ResolvePath(fmt.Sprintf("/dms3fs/%s/about", examplesHash))
 	is.Nil(err)
 	is.Equal(childHash, "QmZTR5bcpQD7cFgTorqxZDYaew1Wqgfbd2ud9QqGPAkK2V")
 }

@@ -11,7 +11,7 @@ import (
 	"os"
 	"strings"
 
-	files "github.com/ipfs/go-ipfs-cmdkit/files"
+	files "github.com/dms3-fs/go-fs-cmdkit/files"
 )
 
 type Request struct {
@@ -120,20 +120,20 @@ func (r *Request) Send(c *http.Client) (*Response, error) {
 		case contentType == "text/plain":
 			out, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "ipfs-shell: warning! response (%d) read error: %s\n", resp.StatusCode, err)
+				fmt.Fprintf(os.Stderr, "dms3fs-shell: warning! response (%d) read error: %s\n", resp.StatusCode, err)
 			}
 			e.Message = string(out)
 		case contentType == "application/json":
 			if err = json.NewDecoder(resp.Body).Decode(e); err != nil {
-				fmt.Fprintf(os.Stderr, "ipfs-shell: warning! response (%d) unmarshall error: %s\n", resp.StatusCode, err)
+				fmt.Fprintf(os.Stderr, "dms3fs-shell: warning! response (%d) unmarshall error: %s\n", resp.StatusCode, err)
 			}
 		default:
-			fmt.Fprintf(os.Stderr, "ipfs-shell: warning! unhandled response (%d) encoding: %s", resp.StatusCode, contentType)
+			fmt.Fprintf(os.Stderr, "dms3fs-shell: warning! unhandled response (%d) encoding: %s", resp.StatusCode, contentType)
 			out, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "ipfs-shell: response (%d) read error: %s\n", resp.StatusCode, err)
+				fmt.Fprintf(os.Stderr, "dms3fs-shell: response (%d) read error: %s\n", resp.StatusCode, err)
 			}
-			e.Message = fmt.Sprintf("unknown ipfs-shell error encoding: %q - %q", contentType, out)
+			e.Message = fmt.Sprintf("unknown dms3fs-shell error encoding: %q - %q", contentType, out)
 		}
 		nresp.Error = e
 		nresp.Output = nil

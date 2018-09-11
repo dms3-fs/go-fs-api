@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-// RequestBuilder is an IPFS commands request builder.
+// RequestBuilder is an DMS3FS commands request builder.
 type RequestBuilder struct {
 	command string
 	args    []string
